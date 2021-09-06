@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { EnteredMessage, Messages } from '../messages';
 import { MessagesService } from '../messages.service';
 import { setMessages } from '../store/messages.actions';
@@ -15,15 +15,15 @@ import { setMessages } from '../store/messages.actions';
 export class MessagesComponent implements OnInit {
   id: number;
   sendMessagesForm: FormGroup;
-  enteredMessage: any[] = [];
-  getmsgData: any[] = [];
   getmsgData$: Observable<Messages[]>;
   newStoreMessage: any;
+  newMessages = [];
+  urlMessages: any;
 
   constructor(
     private messagesService: MessagesService,
     private activatedRoute: ActivatedRoute,
-    private store: Store<{ enteredMessage: EnteredMessage }>
+    private store: Store<{ enteredMessages: EnteredMessage; chats: Messages }>
   ) {}
 
   ngOnInit() {
@@ -31,13 +31,15 @@ export class MessagesComponent implements OnInit {
     this.sendMessagesForm = new FormGroup({
       messageInput: new FormControl()
     });
-    this.getmsgData$ = this.messagesService.getMessages();
-    this.getmsgData$.subscribe(data => console.log(data));
 
-    this.store.select('enteredMessage').subscribe(data => {
-      console.log('In messages comp', data);
+    this.store.select('chats').subscribe(data => {
+      console.log('Messages receiving from URL', data);
+      this.urlMessages = data;
+    });
+
+    this.store.select('enteredMessages').subscribe(data => {
+      console.log('Message receiving from Store to messages component', data);
       this.newStoreMessage = data;
-      // console.log('In comp 1', (this.contacts));
     });
     //this.storeMessage$=this.messagesService.getMessages();
     // this.enteredMessage = JSON.parse(localStorage.getItem('All messages'));
@@ -58,9 +60,10 @@ export class MessagesComponent implements OnInit {
       id: this.id,
       content: this.sendMessagesForm.value.messageInput
     };
-    console.log('entered msg', enteredMessage);
-    this.store.dispatch(setMessages({ enteredMessages: enteredMessage }));
-    // this.messagesService.setMessage(enteredMessage);
+    this.newMessages = Object.assign([], enteredMessage);
+    this.newMessages.push(enteredMessage);
+    console.log('Entered messages dispatching to store', this.newMessages);
+    this.store.dispatch(setMessages({ enteredMessages: this.newMessages }));
     this.sendMessagesForm.reset();
   }
 }

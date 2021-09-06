@@ -14,5 +14,5 @@ export const retrieveMessagesSuccess = createAction(
 
 export const setMessages = createAction(
   SET_MESSAGES,
-  props<{ enteredMessages: EnteredMessage }>()
+  props<{ enteredMessages: EnteredMessage[] }>()
 );

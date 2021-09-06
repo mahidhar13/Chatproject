@@ -11,6 +11,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { messageReducer } from './store/messages.reducer';
+import { messageListReducer } from './store/messagesList.reducer';
 // import { EffectsModule } from '@ngrx/effects';
 // import { messageEffects } from './store/messages.effects';
 
@@ -20,7 +21,8 @@ import { messageReducer } from './store/messages.reducer';
     FormsModule,
     HttpClientModule,
     StoreModule.forRoot({
-      chats: messageReducer
+      chats: messageReducer,
+      enteredMessages: messageListReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25
