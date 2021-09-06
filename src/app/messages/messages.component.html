@@ -1,0 +1,20 @@
+<p><b>ID: </b>{{id}} </p>
+
+<!-- <div *ngFor="let message of getmsgData">
+  <div *ngIf="message.id == id">
+    
+    <p><b>Name: </b>{{message?.sender?.name}}</p> 
+    <p><b>Content: </b>{{message?.content}}</p>
+    <p><b>Date: </b>{{message?.date}} </p> 
+  </div>
+</div> -->
+<form [formGroup]="sendMessagesForm">
+  <input type = "text" formControlName = 'messageInput' />
+  <button (click) = "sendMessage()">Send Message</button>
+</form>
+
+<div *ngFor="let item of getmsgData$ | async">
+  <div *ngIf="item.id == id">
+    <p><b>Message is </b>{{ item.content }}</p>
+  </div>
+</div>
