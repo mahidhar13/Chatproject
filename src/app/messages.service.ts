@@ -24,7 +24,7 @@ export class MessagesService {
   url =
     'https://raw.githubusercontent.com/NablaT/test-api/master/assets/messages.json.txt';
   constructor(private http: HttpClient, private store: Store<Messages[]>) {
-    this.getContacts();
+    // this.getContacts();
   }
 
   // getMessages() {
@@ -40,13 +40,14 @@ export class MessagesService {
   //   return this.storeMessages$;
   // }
   getContacts() {
-    this.http.get<Messages[]>(this.url).subscribe(data => {
-      this.retrieveMessages = data;
-      console.log('Data coming from service', this.retrieveMessages);
-      this.store.dispatch(
-        retrieveMessagesSuccess({ chats: this.retrieveMessages })
-      );
-    });
+    // this.http.get<Messages[]>(this.url).subscribe(data => {
+    //   this.retrieveMessages = data;
+    //   console.log('Data coming from service', this.retrieveMessages);
+    //   this.store.dispatch(
+    //     retrieveMessagesSuccess({ chats: this.retrieveMessages })
+    //   );
+    // });
+    return this.http.get<Messages[]>(this.url);
   }
   // setMessage(message: any) {
   //   const currentMessage = this.storeMessages$.value;

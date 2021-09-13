@@ -12,8 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { messageReducer } from './store/messages.reducer';
 import { messageListReducer } from './store/messagesList.reducer';
-// import { EffectsModule } from '@ngrx/effects';
-// import { messageEffects } from './store/messages.effects';
+import { ContactsGuard } from './contacts.guard';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   imports: [
@@ -29,16 +29,21 @@ import { messageListReducer } from './store/messagesList.reducer';
     }),
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: '', component: ContactsComponent },
-      { path: 'messages/:id', component: MessagesComponent }
+      {
+        path: '',
+        component: ContactsComponent,
+        resolve: { messages: ContactsGuard }
+      },
+      { path: 'messages/:id', component: MessagesComponent },
+      { path: 'error', component: ErrorComponent }
     ])
-    // EffectsModule.forRoot([messageEffects])
   ],
   declarations: [
     AppComponent,
     HelloComponent,
     ContactsComponent,
-    MessagesComponent
+    MessagesComponent,
+    ErrorComponent
   ],
   bootstrap: [AppComponent]
 })
