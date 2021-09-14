@@ -24,20 +24,40 @@ export class ContactsGuard implements Resolve<Messages[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    this.messageService.getContacts().subscribe(data => {
-      this.retrieveMessages = data;
-      console.log(
-        'Guard is dispatching the data to store',
-        this.retrieveMessages
-      );
-      this.store.dispatch(
-        retrieveMessagesSuccess({ chats: this.retrieveMessages })
-      );
-    }),
-      catchError(error => {
-        console.log('error occurred', error);
-        this.router.navigate(['/error']);
-        return EMPTY;
+    // this.messageService.getContacts().subscribe(data => {
+    //   this.retrieveMessages = data;
+    //   console.log(
+    //     'Guard is dispatching the data to store',
+    //     this.retrieveMessages
+    //   );
+    //   this.store.dispatch(
+    //     retrieveMessagesSuccess({ chats: this.retrieveMessages })
+    //   );
+    // });
+    // catchError(error => {
+    //   console.log('error occurred', error);
+    //   this.router.navigate(['/error']);
+    //   return EMPTY;
+    // });
+
+    this.messageService
+      .getContacts()
+      .pipe(
+        catchError(error => {
+          console.log('Error occurred', error);
+          this.router.navigate(['/error']);
+          return EMPTY;
+        })
+      )
+      .subscribe(data => {
+        this.retrieveMessages = data;
+        console.log(
+          'Guard is dispatching data to store',
+          this.retrieveMessages
+        );
+        this.store.dispatch(
+          retrieveMessagesSuccess({ chats: this.retrieveMessages })
+        );
       });
   }
 }
